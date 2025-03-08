@@ -23,3 +23,27 @@ def create_user(user_post:schema.User, db:Session = Depends(get_db)):
     db.refresh(new_user)
 
     return new_user
+
+@app.get('/{user_id}', response_model=schema.User)
+def get_user(user_id:int, db:Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+@app.put('/{user_id}', response_model=schema.User)
+def update_user(user_id:int, user_update:schema.UserUpdate, db:Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == user_id)
+    if user.first() is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    user.update(user_update.model_dump(mode='json', exclude_none=True), synchronize_session=False)
+    db.commit()
+    return user.first()
+
+@app.delete('/{user_id}', status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(user_id:int, db:Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == user_id)
+    if user.first() is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    user.delete(synchronize_session=False)
+    db.commit()
