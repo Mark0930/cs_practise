@@ -12,6 +12,19 @@ services:
       - "5432:5432"
     volumes:
       - data_sql:/var/lib/postgresql/data
+  app:
+    build:
+      context: src
+      dockerfile: Dockerfile
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app
+    # environment:
+    #   DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/sampledb
 
 volumes:
   data_sql:
