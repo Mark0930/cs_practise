@@ -6,6 +6,8 @@ SQLALCHEMY_DATABASE_URL = "postgresql://postgres:mysecretpassword@db:5432/sample
 
 # SQLALCHEMY_DATABASE_URL = "postgresql://postgres:mysecretpassword@localhost:5432/sampledb"
 
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:mysecretpassword@postgres-service:5432/sampledb"
+
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
