@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
  email VARCHAR(100) UNIQUE
 );
 
-INSERT INTO users (name, email) VALUES
- ('Alpha', 'alpha@example.com'),
- ('Beta', 'beta@example.com'),
- ('Gamma', 'gamma@example.com')
-ON CONFLICT (email) DO NOTHING;
+COPY users(name, email)
+FROM '/data.csv'
+DELIMITER ','
+CSV HEADER;
